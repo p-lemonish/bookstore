@@ -1,6 +1,7 @@
-package s24.backend.bookstore;
+package s24.backend.bookstore.domain;
 
 public class Book {
+    
     private String title;
     private String author;
     private int publicationYear;

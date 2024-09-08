@@ -1,4 +1,4 @@
-package s24.backend.bookstore;
+package s24.backend.bookstore.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
