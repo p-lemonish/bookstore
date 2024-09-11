@@ -14,6 +14,11 @@
 
             <label for="author">Author</label>
             <input type="text" id="author" th:field="*{author}" />
+            
+            <label for="category">Author</label>
+            <select th:field="*{category}">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select><br>
 
             <label for="isbn">ISBN</label>
             <input type="text" th:field="*{isbn}" />
