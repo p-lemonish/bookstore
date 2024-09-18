@@ -1,5 +1,7 @@
 package s24.backend.bookstore.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +22,7 @@ public class Book {
     private int price;
 
     @ManyToOne
+    @JsonIgnore
     private Category category;
 
     public Book() {

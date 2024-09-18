@@ -2,60 +2,60 @@ package s24.backend.bookstore.web;
 import s24.backend.bookstore.domain.Book;
 
 import s24.backend.bookstore.domain.BookRepository;
-import s24.backend.bookstore.domain.CategoryRepository;
-import s24.backend.bookstore.domain.Category;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+import java.util.Optional;
 
 
-@Controller
+
+@RestController
+@RequestMapping("/api/books")
 public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @RequestMapping("/index")
-    public String showIndex() {
-        return "index";
-    }
-
-    @RequestMapping(value={"/", "/booklist"})
-    public String showList(Model model) {
-        model.addAttribute("books", bookRepository.findAll());
-        return "booklist";
-    }
-    @PostMapping("/save")
-    public String save(Book book, @RequestParam("category") Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->  new IllegalArgumentException("Invalid category ID: " + categoryId));
-        book.setCategory(category);
-        bookRepository.save(book);
-        return "redirect:/booklist";
-    }
-    @GetMapping("/delete/{id}")
-    public String deleteBook(@PathVariable("id") Long id, Model model) {
-        bookRepository.deleteById(id);
-        return "redirect:/booklist";
+    @GetMapping
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
     
-    @RequestMapping("/edit/{id}")
-    public String showEditBook(@PathVariable("id") Long id, Model model){
-        model.addAttribute("book", bookRepository.findById(id));
-        return "editbook";
+    @PostMapping
+    public Book addBook(@RequestBody Book book) {
+        return bookRepository.save(book);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable long id) {
+        bookRepository.deleteById(id);
     }
 
-    @GetMapping("/add")
-    public String showAddBookForm(Model model) {
-        model.addAttribute("book", new Book());
-        model.addAttribute("categories", categoryRepository.findAll());
-        return "addbook";
+    @GetMapping("/{id}")
+    public Optional<Book> getBookById(@PathVariable long id) {
+        return bookRepository.findById(id);
     }
+
+    @PutMapping("/{id}")
+    public Book updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
+        return bookRepository.findById(id).map(book -> {
+                book.setTitle(updatedBook.getTitle());
+                book.setAuthor(updatedBook.getAuthor());
+                book.setPublicationYear(updatedBook.getPublicationYear());
+                book.setIsbn(updatedBook.getIsbn());
+                book.setPrice(updatedBook.getPrice());
+                book.setCategory(updatedBook.getCategory());
+                return bookRepository.save(book);
+            })
+            .orElseThrow(() -> new IllegalArgumentException("Invalid book ID: " + id));
+    }
+    
 }
