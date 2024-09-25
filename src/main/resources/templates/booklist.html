@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
 <head>
     <title>Book List</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css"> 
 </head>
     <body>
-        <a href="/add" class="btn btn-success">Add Book</a>
+        <th:block sec:authorize="hasRole('ADMIN')">
+            <a href="/add" class="btn btn-success">Add Book</a>
+        </th:block>
+        <p>Logged in as: <span sec:authentication="name"></span></p>
+        <a th:href="@{/logout}" class="btn btn-secondary">Logout</a>
         <table class="table table-striped">
             <tr>
                 <th>Title</th>
@@ -23,8 +27,10 @@
                 <td th:text="${book.publicationYear}"></td>
                 <td th:text="${book.price}"></td>
                 <td>
-                    <a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger">Delete</a>
-                    <a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-warning">Edit</a>
+                    <th:block sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger">Delete</a>
+                        <a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-warning">Edit</a>
+                    </th:block>
                 </td>
             </tr>
         </table>
