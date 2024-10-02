@@ -1,4 +1,8 @@
 FROM openjdk:17-jdk-slim
+RUN apt-get update && apt-get install -y maven
+WORKDIR /app
+COPY . .
+RUN ./mvnw clean package
 VOLUME /tmp
 ARG JAVA_OPTS
 ENV JAVA_OPTS=$JAVA_OPTS
