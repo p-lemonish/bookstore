@@ -89,6 +89,14 @@
 			</exclusions>
 		</dependency>
 
+		<!-- AssertJ Core for Fluent Assertions -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.24.2</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Spring Test -->
 		<dependency>
 			<groupId>org.springframework</groupId>
