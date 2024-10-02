@@ -20,6 +20,7 @@ public class BookstoreApplication {
 	}
 
 	@Bean
+	@Profile("!test")
 	public CommandLineRunner demo(CategoryRepository categoryRepository) {
 		return (args) -> {
 			categoryRepository.save(new Category("Fiction"));
