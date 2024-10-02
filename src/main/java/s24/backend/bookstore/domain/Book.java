@@ -7,19 +7,30 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Book {
-    
+
+    @NotBlank(message = "Title is mandatory")
+    private String title;
+
+    @NotBlank(message = "Author is mandatory")
+    private String author;
+
+    @Min(value = 0, message = "Publication year must be positive")
+    private int publicationYear;
+
+    @NotBlank(message = "ISBN is mandatory")
+    private String isbn;
+
+    @Min(value = 0, message = "Price must be non-negative")
+    private double price;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
-    private String title;
-    private String author;
-    private int publicationYear;
-    private String isbn;
-    private int price;
 
     @ManyToOne
     @JsonIgnore
@@ -68,10 +79,10 @@ public class Book {
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
     public Long getId() {

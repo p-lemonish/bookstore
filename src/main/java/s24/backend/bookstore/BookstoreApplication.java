@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import s24.backend.bookstore.domain.AppUser;
@@ -28,6 +29,7 @@ public class BookstoreApplication {
 		};
 	}
 	@Bean
+	@Profile("!test")
     public CommandLineRunner initUsers(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             appUserRepository.save(new AppUser("user", passwordEncoder.encode("password"), "user@example.com", "USER"));
