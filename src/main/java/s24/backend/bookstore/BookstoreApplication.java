@@ -23,18 +23,26 @@ public class BookstoreApplication {
 	@Profile("!test")
 	public CommandLineRunner demo(CategoryRepository categoryRepository) {
 		return (args) -> {
-			categoryRepository.save(new Category("Fiction"));
-			categoryRepository.save(new Category("Non-Fiction"));
-			categoryRepository.save(new Category("Fantasy"));
-			categoryRepository.save(new Category("Science"));
+			if(categoryRepository.count() == 0) {
+				categoryRepository.save(new Category("Fiction"));
+				categoryRepository.save(new Category("Non-Fiction"));
+				categoryRepository.save(new Category("Fantasy"));
+				categoryRepository.save(new Category("Science"));
+			}
 		};
 	}
 	@Bean
 	@Profile("!test")
     public CommandLineRunner initUsers(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
         return args -> {
+		AppUser user = appUserRepository.findByUsername("user");
+		AppUser admin = appUserRepository.findByUsername("admin");
+		if (user == null) {
             appUserRepository.save(new AppUser("user", passwordEncoder.encode("password"), "user@example.com", "USER"));
+        }
+        if (admin == null) {
             appUserRepository.save(new AppUser("admin", passwordEncoder.encode("admin"), "admin@example.com", "ADMIN"));
+        }
         };
     }
 }
