@@ -15,7 +15,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
             .formLogin(form -> form.permitAll())
-            .logout(logout -> logout.logoutSuccessUrl("/login?logout").permitAll());
+            .logout(logout -> logout.logoutSuccessUrl("/login").permitAll());
         return http.build();
     }
 
